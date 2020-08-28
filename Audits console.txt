@@ -1,0 +1,93 @@
+Accounts:
+// Be sure to copy the addresses for A-F from your own Ganache addresses at the beginning and throughout this file.
+//If you use a text editor, you can do a Find and Replace to speed up this step.
+//Also we have made constructor for adding Admin whenever we deploy the contract
+
+A-2: 0xEB4B22903F7031133Ab742540E17Cc0dA6b1FE4E
+B-3: 0xF25d0cf9e11E31eBDff17064DE60bD419a2C465b
+C-4: 0xBb58b665bd57b97aF9560b85Ac9b579B6eA62d14
+D-5: 0xA535677779D2e191e056ffDD99766b29077248f6
+E-6: 0x3d8776A3FB9bfBeE5f6d99D90017547eE4935BD0
+F-7: 0xBE41e33aef2620abBBE2fdef8E3e981D023505C5
+
+supplyChain.deployed().then(function(instance) {return instance });
+
+// Create 3 manufacturer participants (A, B, C)
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("A","passA","0xEB4B22903F7031133Ab742540E17Cc0dA6b1FE4E","User11") });
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("B","passB","0xF25d0cf9e11E31eBDff17064DE60bD419a2C465b","User12") });
+
+// Create 2 supplier participants (D, E)
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("C","passC","0xBb58b665bd57b97aF9560b85Ac9b579B6eA62d14","User21") });
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("D","passD","0xA535677779D2e191e056ffDD99766b29077248f6","User22") });
+
+// Create 2 consumer participants (F, G)
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("E","passE","0x3d8776A3FB9bfBeE5f6d99D90017547eE4935BD0","User31") });
+expenseChain.deployed().then(function(instance) {return instance.addParticipant("F","passF","0xBE41e33aef2620abBBE2fdef8E3e981D023505C5","User32") });
+
+// Get participant details4
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(1)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(2)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(3)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(4)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(5)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(6)});
+expenseChain.deployed().then(function(instance) {return instance.getParticipant(7)});
+
+// Create 6 expense ABC and DEF (owned by Admin), GHI and JKL (owned by A), MNO and PQR (owned by C)
+expenseChain.deployed().then(function(instance) {return instance.addExpense(1, "ABC", "Construction CE", 50000) });
+expenseChain.deployed().then(function(instance) {return instance.addExpense(2, "GHI", "Transportation", 3000, {from:"0xEB4B22903F7031133Ab742540E17Cc0dA6b1FE4E"}) });
+expenseChain.deployed().then(function(instance) {return instance.addExpense(4, "MNO", "Expert Lecture", 2000, {from:"0xBb58b665bd57b97aF9560b85Ac9b579B6eA62d14"}) });
+expenseChain.deployed().then(function(instance) {return instance.addExpense(2, "JKL", "Technical Event", 5000, {from:"0xEB4B22903F7031133Ab742540E17Cc0dA6b1FE4E"}) });
+expenseChain.deployed().then(function(instance) {return instance.addExpense(4, "PQR", "Exams", 2000, {from:"0xBb58b665bd57b97aF9560b85Ac9b579B6eA62d14"}) });
+expenseChain.deployed().then(function(instance) {return instance.addExpense(1, "DEF", "Construction IT", 30000) });
+
+// Get expense details
+expenseChain.deployed().then(function(instance) {return instance.getExpense(1) });
+expenseChain.deployed().then(function(instance) {return instance.getExpense(2) });
+expenseChain.deployed().then(function(instance) {return instance.getExpense(3) });			
+expenseChain.deployed().then(function(instance) {return instance.getExpense(4) });
+expenseChain.deployed().then(function(instance) {return instance.getExpense(5) });
+expenseChain.deployed().then(function(instance) {return instance.getExpense(6) });
+
+// Give add expense rights
+
+expenseChain.deployed().then(function(instance) {return instance.giveRights(1,2)});
+expenseChain.deployed().then(function(instance) {return instance.giveRights(2,4)});
+
+//Revoke the rights
+
+expenseChain.deployed().then(function(instance) {return instance.revokeRights(1,2)});
+
+//get provencnace or tracking of information
+expenseChain.deployed().then(function(instance) {return instance.getProvenance(1) });
+supplyChain.deployed().then(function(instance) {return instance.getProvenance(2) });
+supplyChain.deployed().then(function(instance) {return instance.getProvenance(4) });
+supplyChain.deployed().then(function(instance) {return instance.getProvenance(5) });
+
+//Authentication
+expenseChain.deployed().then(function(instance) {return instance.authenticateParticipant(3,"B","passB","User12") });
+
+//
+//
+//
+
+function addParticipant(string memory _name, string memory _pass, address _pAdd, string memory _pType) public returns (uint32)
+
+function getParticipant(uint32 _participant_id) public view returns (string memory,address,string memory)
+
+function addExpense(uint32 _ownerId,string memory _name, string memory _purpose, uint32 _Cost) public returns (uint32)
+
+function getExpense(uint32 _expId) public view returns (string memory,string memory,uint32,address,uint32)
+
+function giveRights(uint32 owId,uint32 userId) public onlyOwner(owId) returns(bool)
+
+function getProvenance(uint32 par) external view returns (uint32[] memory)
+
+function authenticateParticipant(uint32 _uid, string memory _uname,string memory _pass, string memory _utype) public view returns (bool)
+
+//
+//
+Future enhancement:
+- assembling this contract with ERC tokens
+- GUI using web3 and react
+- more functionalities of tarnsacting amount can be added
